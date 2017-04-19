@@ -317,7 +317,7 @@ counterForContentInPTag1++;
 
 
 
-$.getScript("js/webspeech.js", function(){
+$.getScript("webspeech.js", function(){
 
    var reco = new WebSpeechRecognition();
 reco.statusText('status');
