@@ -1,6 +1,6 @@
 <?php
 
-$handle = fopen('test.txt', 'r+');
+$handle = fopen('php/test.txt', 'r+');
 ftruncate($handle, 0);
 fclose($handle);
 
