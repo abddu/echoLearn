@@ -34,7 +34,7 @@ $("document").ready(function() {
      });
 
 function getData() {
-      	$.get("test.txt", readFromFile);   // turn test.txt into a variable and make a function tht change it ,so that people can hoose thier own stories(file)
+      	$.get("php/test.txt", readFromFile);   // turn test.txt into a variable and make a function tht change it ,so that people can hoose thier own stories(file)
        //$("#content").load("test.txt");
       }
 
