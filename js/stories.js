@@ -11,13 +11,13 @@ var counterForButtonOnclick=0;
 function onloadFunc(){
 
 //decided to compare the inputfield to the first line of the txt file here instead of "test" etc
-
+  
              
             //      helper(document.getElementById('input_field').value.toLowerCase(), );   //similar to making an object,important to be able to use the methods inside helper()
                  helper( "","" );    //come back to this
            $("#contentTag").append(out1); 
-}
-   
+}  
+
 
 function helper(a,b){
 
@@ -34,7 +34,7 @@ $("document").ready(function() {
      });
 
 function getData() {
-      	$.get("php/test.txt", readFromFile);   // turn test.txt into a variable and make a function tht change it ,so that people can hoose thier own stories(file)
+      	$.get("test.txt", readFromFile);   // turn test.txt into a variable and make a function tht change it ,so that people can hoose thier own stories(file)
        //$("#content").load("test.txt");
       }
 
@@ -170,6 +170,72 @@ console.log(lines.length);
 }//function end
 
 
+/////////////////////////////////////////////////////////populate function
+
+
+
+function populate(param){
+    
+		var inputSentence=param;
+		
+		//position of/index  of element desired to be changed
+		var b=inputSentence.split("");
+		console.log(b);
+		console.log(b[0]);
+		
+		for(var i=0;i<=b.length;i++){
+				
+				if(b[i]==1){
+					b[i]="one ";
+				}
+				if(b[i]==2){
+					b[i]="two ";
+				}
+				if(b[i]==3){
+					b[i]="three ";
+				}
+				if(b[i]==4){
+					b[i]="four ";
+				}
+				if(b[i]==5){
+					b[i]="five ";
+				}
+				if(b[i]==6){
+					b[i]="six ";
+				}
+				if(b[i]==7){
+					b[i]="seven ";
+				}
+				if(b[i]==8){
+					b[i]="eight ";
+				}
+				if(b[i]==9){
+					b[i]="nine ";
+				}
+				if(b[i]===0){
+					b[i]="zero ";
+				}
+				if(b[i]==" "){
+					b[i]=" ";
+				}
+				
+	}			
+		
+}		//make a if statement for all the character like  ;'.,?!@#$%^&*()  using if(b[i]==!||b[i]==?)  etc and replace it with a space " "
+				
+
+//////////////////////////////////////////////Select Language
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -197,7 +263,22 @@ speechSynthesis.speak(su);
 
 }
 
+/*
+document.onload=function()
+{
+         //from input text form box
 
+         var inputText=document.getElementById('input_field').value.toLowerCase();
+	var input=inputText.split(" "); //array
+
+var a =inputText;
+var b=input;
+
+         helper(a,b);
+
+}
+	
+*/
 
 function onloadTts(){
 var a='hello, Welcome to Echo Learning';
@@ -207,6 +288,17 @@ tts(a);
 
 
  
+ // after the first click,the speec is recorded,after the second click,the speech is compared
+//var counterForButtonOnclick=0;
+//on first clik;record,on second click;compare.
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 
