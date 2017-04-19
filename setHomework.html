@@ -1,0 +1,358 @@
+<!DOCTYPE html> 
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>TEACHER </title> 
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
+</head> 
+
+
+<style>
+  .hide { position:absolute; top:-1px; left:-1px; width:1px; height:1px; }
+</style>
+
+
+
+
+<body> 
+
+<div data-role="page">
+
+	<div data-role="header">
+		<h1>SET HOMEWORK</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">	
+		
+<iframe name="hiddenFrame" class="hide"></iframe>
+
+ <form action="php/o.php" method="POST"  target="hiddenFrame"  >
+
+    <textarea name="field1" type="text" > </textarea>
+    <input type="submit" name="submit" id="upload" value="Upload Homework"  >
+
+
+</form>
+
+
+
+<form action="php/w.php" method="POST"  target="hiddenFrame">
+
+
+    <input type="submit" id="delete" name="submit1" value="Clear File">
+</form>
+
+<!-- /set the language after this -->
+	<h3>Choose Language</h3>
+<div id="div_language">
+
+   <select id="select_language" onchange="updateCountry()">
+            </select>&nbsp;&nbsp; <select id="select_dialect">
+    </select>
+</div>
+
+
+
+
+        <!-- Add  pdf uploadable books that will be changed into .txt files later on   -->
+		
+		<h3>Begin The Lesson</h3>
+                   
+
+
+                   <!-- this button should upload the work to the text file on the server  -->
+		<p id="reload"><a href="index.html" data-role="button">Test it out </a></p>	
+	
+	</div><!-- /content -->
+
+
+
+
+     <script src="js/jquery.js"></script>
+<script src="js/webspeech.js"></script>
+
+
+	
+<script>
+
+$('#reload').click(function() {
+  //  location.reload(true);
+history.go(0)
+});
+
+
+
+
+//this is to force the link to send you to the other page
+$('#reload').click(function() {
+  //  location.reload(true);
+history.go(0)
+});
+
+//choose language
+
+
+
+
+var langs =
+[['Arabic-Saudi Arabia',['ar-SA']],
+ ['English',         ['en-AU', 'Australia'],
+                     ['en-CA', 'Canada'],
+                     ['en-IN', 'India'],
+                     ['en-NZ', 'New Zealand'],
+                     ['en-ZA', 'South Africa'],
+                     ['en-GB', 'United Kingdom'],
+                     ['en-US', 'United States']],
+ ['IsiZulu',         ['zu-ZA']],
+['Afrikaans',       ['af-ZA']],       
+['Xhosa',       ['xh-ZA']],
+];
+
+
+for (var i = 0; i < langs.length; i++) {
+  select_language.options[i] = new Option(langs[i][0], i);
+}
+select_language.selectedIndex = 1;
+updateCountry();
+select_dialect.selectedIndex = 4;
+//showInfo('info_start');
+
+function updateCountry() {
+  for (var i = select_dialect.options.length - 1; i >= 0; i--) {
+    select_dialect.remove(i);
+  }
+  var list = langs[select_language.selectedIndex];
+  for (var i = 1; i < list.length; i++) {
+    select_dialect.options.add(new Option(list[i][1], list[i][0]));
+  }
+  select_dialect.style.visibility = list[1].length == 1 ? 'hidden' : 'visible';
+}
+
+
+
+///////////////////////////////////////////
+
+
+var create_email = false;
+var final_transcript = '';
+var recognizing = false;
+var ignore_onend;
+var start_timestamp;
+if (!('webkitSpeechRecognition' in window)) {
+  upgrade();
+} else {
+ // start_button.style.display = 'inline-block';
+  var recognition = new webkitSpeechRecognition();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+
+  recognition.onstart = function() {
+    recognizing = true;
+    showInfo('info_speak_now');
+    start_img.src = 'mic-animate.gif';
+  };
+
+  recognition.onerror = function(event) {
+    if (event.error == 'no-speech') {
+      start_img.src = 'mic.gif';
+     // showInfo('info_no_speech');
+      ignore_onend = true;
+    }
+    if (event.error == 'audio-capture') {
+      start_img.src = 'mic.gif';
+      //showInfo('info_no_microphone');
+      ignore_onend = true;
+    }
+    if (event.error == 'not-allowed') {
+      if (event.timeStamp - start_timestamp < 100) {
+        //showInfo('info_blocked');
+      } else {
+     //   showInfo('info_denied');
+      }
+      ignore_onend = true;
+    }
+  };
+
+  recognition.onend = function() {
+    recognizing = false;
+    if (ignore_onend) {
+      return;
+    }
+    start_img.src = 'mic.gif';
+    if (!final_transcript) {
+  //    showInfo('info_start');
+      return;
+    }
+  //  showInfo('');
+    if (window.getSelection) {
+      window.getSelection().removeAllRanges();
+      var range = document.createRange();
+      range.selectNode(document.getElementById('final_span'));
+      window.getSelection().addRange(range);
+    }
+    if (create_email) {
+      create_email = false;
+      createEmail();
+    }
+  };
+
+  recognition.onresult = function(event) {
+    var interim_transcript = '';
+    for (var i = event.resultIndex; i < event.input_field.length; ++i) {
+      if (event.input_field[i].isFinal) {
+        final_transcript += event.input_field[i][0].transcript;
+      } else {
+        interim_transcript += event.input_field[i][0].transcript;
+      }
+    }
+    final_transcript = capitalize(final_transcript);
+    final_span.innerHTML = linebreak(final_transcript);
+    interim_span.innerHTML = linebreak(interim_transcript);
+    if (final_transcript || interim_transcript) {
+      showButtons('inline-block');
+    }
+  };
+}
+
+function upgrade() {
+//  start_button.style.visibility = 'hidden';
+  //showInfo('info_upgrade');
+}
+
+var two_line = /\n\n/g;
+var one_line = /\n/g;
+function linebreak(s) {
+  return s.replace(two_line, '<p></p>').replace(one_line, '<br>');
+}
+
+var first_char = /\S/;
+function capitalize(s) {
+  return s.replace(first_char, function(m) { return m.toUpperCase(); });
+}
+
+function createEmail() {
+  var n = final_transcript.indexOf('\n');
+  if (n < 0 || n >= 80) {
+    n = 40 + final_transcript.substring(40).indexOf(' ');
+  }
+  var subject = encodeURI(final_transcript.substring(0, n));
+  var body = encodeURI(final_transcript.substring(n + 1));
+  window.location.href = 'mailto:?subject=' + subject + '&body=' + body;
+}
+
+function copyButton() {
+  if (recognizing) {
+    recognizing = false;
+    recognition.stop();
+  }
+  copy_button.style.display = 'none';
+  copy_info.style.display = 'inline-block';
+  //showInfo('');
+}
+
+function emailButton() {
+  if (recognizing) {
+    create_email = true;
+    recognizing = false;
+    recognition.stop();
+  } else {
+    createEmail();
+  }
+  email_button.style.display = 'none';
+  email_info.style.display = 'inline-block';
+//  showInfo('');
+}
+
+function startButton(event) {
+  if (recognizing) {
+    recognition.stop();
+    return;
+  }
+  final_transcript = '';
+  recognition.lang = select_dialect.value;
+  recognition.start();
+  ignore_onend = false;
+  final_span.innerHTML = '';
+  interim_span.innerHTML = '';
+  start_img.src = 'mic-slash.gif';
+  showInfo('info_allow');
+  showButtons('none');
+  start_timestamp = event.timeStamp;
+}
+
+//function showInfo(s) {
+ // if (s) {
+   // for (var child = info.firstChild; child; child = child.nextSibling) {
+    //  if (child.style) {
+    //    child.style.display = child.id == s ? 'inline' : 'none';
+    //  }
+ //   }
+ //   info.style.visibility = 'visible';
+ // } else {
+  //  info.style.visibility = 'hidden';
+ // }
+//}
+
+var current_style;
+function showButtons(style) {
+  if (style == current_style) {
+    return;
+  }
+  current_style = style;
+  copy_button.style.display = style;
+  email_button.style.display = style;
+  copy_info.style.display = 'none';
+  email_info.style.display = 'none';
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////
+
+
+
+
+
+
+
+//function updateCountry() {
+ // for (var i = select_dialect.options.length - 1; i >= 0; i--) {
+    //select_dialect.remove(i);
+  //}
+  //var list = langs[select_language.selectedIndex];
+  //for (var i = 1; i < list.length; i++) {
+   // select_dialect.options.add(new Option(list[i][1], list[i][0]));
+  //}
+  //select_dialect.style.visibility = list[1].length == 1 ? 'hidden' : 'visible';
+//}
+
+//for (var i = 0; i < langs.length; i++) {
+  //select_language.options[i] = new Option(langs[i][0], i);
+//}
+//select_language.selectedIndex = 1;
+//updateCountry();
+//select_dialect.selectedIndex = 4;
+</script>
+
+
+
+
+
+</body>
+</html>
