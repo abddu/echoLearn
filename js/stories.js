@@ -393,12 +393,12 @@ function updateCountry() {
   select_dialect.style.visibility = list[1].length == 1 ? 'hidden' : 'visible';
 }
 
-for (var i = 0; i < langs.length; i++) {
-  select_language.options[i] = new Option(langs[i][0], i);
-}
-select_language.selectedIndex = 0;
-updateCountry();
-select_dialect.selectedIndex = 6;
+//for (var i = 0; i < langs.length; i++) {
+ // select_language.options[i] = new Option(langs[i][0], i);
+//}
+//select_language.selectedIndex = 0;
+//updateCountry();
+//select_dialect.selectedIndex = 6;
 
 
 
