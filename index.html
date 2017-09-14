@@ -1,174 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 
-<head>
+<body id="demo">
+<script>
+navigator.sayswho= (function(){
+    var ua= navigator.userAgent, tem, 
+    M= ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+    if(/trident/i.test(M[1])){
+        tem=  /\brv[ :]+(\d+)/g.exec(ua) || [];
+        return 'IE '+(tem[1] || '');
+    }
+    if(M[1]=== 'Chrome'){
+        tem= ua.match(/\b(OPR|Edge)\/(\d+)/);
+        if(tem!= null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
+    }
+    M= M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
+    if((tem= ua.match(/version\/(\d+)/i))!= null) M.splice(1, 1, tem[1]);
+    return M.join(' ');
+})();
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>EchoLearning</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link href="css/clean-blog.min.css" rel="stylesheet">
-
-    <!-- Custom Fonts -->
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-
-	
-	<style>
-		del{
-			background:#F08080;
-		}
-		ins{
-			background:#7FFF00;
-		}
-		del1{
-			background:yellow;
-		}
-
-.center {
-    margin: auto;
-    width: 100%;
- 
-    padding: 10px;
-}
-</style>
-
-
-</head>
-
-<body  onload="onL()">
-
-          
-
-<br>
-<br>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1" >
-				
-				 
-				   <div  class="center" style="background-color:black;position: relative;   border:3px solid #73AD21; ">  <!-- use a chalk boared image as backgrod -->
-					<h1 id="contentTag" class="transbox" style="color:white;  text-align:center; font-size:35px;"> <h1>
-					<h1 id="contentTag1" class="transbox" style="color:yellow;  text-align:center; font-size:35px;"> <h1>
-					<p id="contentTag2" class="transbox" style="color:pink;  text-align:center; font-size:35px;">  <p>
-				   </div>
-					 <hr>
-					  <!-- <hr> <hr>-->
-					
-					<!-- <form >	 -->
-					
-					
-						  <div  class="center">					
-					<textarea name="myTextBox"  id="input_field" cols="50" rows="3" style="width:100%">
-							
-					</textarea> 
-					
-				
-						</div>	
-<div  class="center">
-
-															
-						<center>
-					 <button  id="g" type="button"style="  margin-left: auto;   margin-right: auto  ; color:green; font-size:55px;  ;  border: 90; background-color:transparent">
-						<img  id="status_img" style="color:grey ;background-color:white; width:90px;" src="img\mic.gif" alt="Start">
-					 </button>  
-					 <!-- USE THE MIC.GIF FOR THE BUTTON  LATER -->
-					 </center>
-							
-
-<br><br><br><br>
-
-<center>
-
-<!-- <h2><a href="setHomework.html" data-role="button">Set Homework </a></h2>-->
-</center>
-							
-					
-</div>	
-
-
-
-                </div>
-            </div>
-        </div>
-    <!-- </article> -->
-
-    <hr>
-
-    
-
-	
-    <!-- jQuery -->
-    <script src="js/jquery.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
-
-    <!-- Custom Theme JavaScript -->
-    <script src="js/clean-blog.min.js"></script>
-
-<!--  contains the Methods for Comparing and checking if sentences match -->
-	<script src="js/stories.js"></script>
-
-	<!-- contains sdk for Webspeech -->
-	<script src="js/webspeech.js"></script>
-     
-	<!--  contains diffString methods -->
-	<script src="js/firstAnswerDiffString.js"></script>
-
-	
-	
-	<!-- contains the run  code for webspeech.js 
-	<script src="js/runWebSpeech.js"></script>-->
-	
-	<!-- run a few javascript code  -->
-	<script>
-
-
-
-
-
-
-
-//this was in the other file
-  var reco = new WebSpeechRecognition();
-reco.statusText('status');
-reco.statusImage('status_img');
-reco.finalResults('input_field');
-reco.continuous = true;
-
-// Handler when user clicks microphone button.
-function microphoneButton() {
- // reco.lang = document.getElementById('select_dialect').value;
-  reco.toggleStartStop();
-}
-
-
-
-
-
-		
-		//run this code when  document loads
-		function onL() {
-      			onloadFunc(); //calls the helper methods to fill contentTag with sentence in the txt fie
-				 //onloadTts();//welcome message on tts
-		}
-		
-
+console.log(navigator.sayswho); 
+alert(navigator.sayswho);
 </script>
-	 
-	
-	
+
 
 </body>
-
-</html>
+<html>
